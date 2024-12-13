@@ -5,6 +5,8 @@ import (
 	"strings"
 	"time"
 
+	"gh/internal/dagger"
+
 	"github.com/samber/lo"
 )
 
@@ -26,24 +28,29 @@ func New(
 
 	// GitHub token.
 	// +optional
-	token *Secret,
+	token *dagger.Secret,
 
 	// GitHub repository (e.g. "owner/repo").
 	// +optional
 	repo string,
 
+	// Gh plugins
+	// +optional
+	plugins []string,
+
 	// Base container for the Github CLI
 	// +optional
-	base *Container,
+	base *dagger.Container,
 ) *Gh {
 	return &Gh{
 		Binary: GHBinary{
 			Version: version,
 		},
 		GHContainer: GHContainer{
-			Base:  base,
-			Token: token,
-			Repo:  repo,
+			Base:    base,
+			Token:   token,
+			Repo:    repo,
+			Plugins: plugins,
 		},
 	}
 }
@@ -57,12 +64,17 @@ func (m *Gh) Container(
 
 	// GitHub token.
 	// +optional
-	token *Secret,
+	token *dagger.Secret,
 
 	// GitHub repository (e.g. "owner/repo").
 	// +optional
 	repo string,
-) (*Container, error) {
+
+	// Gh plugins
+	// +optional
+	plugins []string,
+
+) (*dagger.Container, error) {
 	file, err := lo.Ternary(version != "", m.Binary.WithVersion(version), m.Binary).binary(ctx)
 	if err != nil {
 		return nil, err
@@ -74,6 +86,7 @@ func (m *Gh) Container(
 	// update the container with the given token and repository if provided
 	gc = lo.Ternary(token != nil, gc.WithToken(token), gc)
 	gc = lo.Ternary(repo != "", gc.WithRepo(repo), gc)
+	gc = lo.Ternary(plugins != nil, gc.WithPlugins(plugins), gc)
 
 	// get the container object with the given binary
 	ctr := gc.container(file)
@@ -94,18 +107,22 @@ func (m *Gh) Run(
 
 	// GitHub token.
 	// +optional
-	token *Secret,
+	token *dagger.Secret,
 
 	// GitHub repository (e.g. "owner/repo").
 	// +optional
 	repo string,
 
+	// Gh plugins
+	// +optional
+	plugins []string,
+
 	// disable cache
 	// +optional
 	// +default=false
 	disableCache bool,
-) (*Container, error) {
-	ctr, err := m.Container(ctx, version, token, repo)
+) (*dagger.Container, error) {
+	ctr, err := m.Container(ctx, version, token, repo, plugins)
 	if err != nil {
 		return nil, err
 	}
@@ -114,7 +131,7 @@ func (m *Gh) Run(
 	ctr = lo.Ternary(disableCache, ctr.WithEnvVariable("CACHE_BUSTER", time.Now().String()), ctr)
 
 	// run the command and return the container
-	return ctr.WithExec([]string{"sh", "-c", strings.Join([]string{"/usr/local/bin/gh", cmd}, " ")}, ContainerWithExecOpts{SkipEntrypoint: true}), nil
+	return ctr.WithExec([]string{"sh", "-c", strings.Join([]string{"/usr/local/bin/gh", cmd}, " ")}), nil
 }
 
 // Get the GitHub CLI binary.
@@ -132,7 +149,7 @@ func (m *Gh) Get(
 	// version of the Github CLI
 	// +optional
 	version string,
-) (*File, error) {
+) (*dagger.File, error) {
 	return lo.Ternary(version != "", m.Binary.WithVersion(version), m.Binary).
 		WithOS(goos).
 		WithArch(goarch).

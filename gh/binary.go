@@ -8,6 +8,8 @@ import (
 	"runtime"
 	"strings"
 
+	"gh/internal/dagger"
+
 	"github.com/google/go-github/v61/github"
 	"github.com/hashicorp/go-getter"
 	"github.com/samber/lo"
@@ -65,7 +67,7 @@ func (b GHBinary) getLatestCliVersion(ctx context.Context) (string, error) {
 }
 
 // binary returns the Github CLI binary.
-func (b GHBinary) binary(ctx context.Context) (*File, error) {
+func (b GHBinary) binary(ctx context.Context) (*dagger.File, error) {
 	if b.Version == "" {
 		version, err := b.getLatestCliVersion(ctx)
 		if err != nil {
