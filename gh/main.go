@@ -70,9 +70,9 @@ func (m *Gh) Container(
 	// +optional
 	repo string,
 
-	// Gh plugin names
+	// Gh plugins
 	// +optional
-	plugins []string,
+	plugins []GHPlugin,
 
 ) (*dagger.Container, error) {
 	file, err := lo.Ternary(version != "", m.Binary.WithVersion(version), m.Binary).binary(ctx)
@@ -83,21 +83,10 @@ func (m *Gh) Container(
 	// get the github container configuration
 	gc := m.GHContainer
 
-	pluginList := []GHPlugin{}
-
-	// for idx, pluginName := range plugins {
-	// 	pluginVersion := pluginVersions[idx]
-
-	// 	pluginList = append(pluginList, GHPlugin{
-	// 		Name:    pluginName,
-	// 		Version: pluginVersion,
-	// 	})
-	// }
-
 	// update the container with the given token and repository if provided
 	gc = lo.Ternary(token != nil, gc.WithToken(token), gc)
 	gc = lo.Ternary(repo != "", gc.WithRepo(repo), gc)
-	gc = lo.Ternary(plugins != nil, gc.WithPlugins(pluginList), gc)
+	gc = lo.Ternary(plugins != nil, gc.WithPlugins(plugins), gc)
 
 	// get the container object with the given binary
 	ctr := gc.container(file)
