@@ -90,7 +90,7 @@ func (m *Gh) Container(
 	// update the container with the given token and repository if provided
 	gc = lo.Ternary(token != nil, gc.WithToken(token), gc)
 	gc = lo.Ternary(repo != "", gc.WithRepo(repo), gc)
-	gc = lo.Ternary(plugins != nil, gc.WithPlugins(pluginNames, []string{}), gc)
+	gc = lo.Ternary(plugins != nil, gc.WithPlugins(pluginNames), gc)
 
 	// get the container object with the given binary
 	ctr := gc.container(file)
