@@ -7,6 +7,11 @@ import (
 	"github.com/samber/lo"
 )
 
+type GHPlugin struct {
+	name string,
+	version string,
+}
+
 type GHContainer struct {
 	// Base container for the Github CLI
 	Base *dagger.Container
@@ -18,7 +23,7 @@ type GHContainer struct {
 	Repo string
 
 	// Github Plugins
-	Plugins []map[string]string
+	Plugins []GHPlugin
 }
 
 // WithRepo returns the GHContainer with the given repository.
