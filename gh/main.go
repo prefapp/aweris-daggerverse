@@ -72,7 +72,7 @@ func (m *Gh) Container(
 
 	// Gh plugin names
 	// +optional
-	pluginNames []string,
+	plugins []string,
 
 	// Gh plugin versions
 	// +optional
@@ -87,12 +87,12 @@ func (m *Gh) Container(
 	// get the github container configuration
 	gc := m.GHContainer
 
-	plugins := []GHPlugin{}
+	pluginList := []GHPlugin{}
 
-	for idx, pluginName := range pluginNames {
+	for idx, pluginName := range plugins {
 		pluginVersion := pluginVersions[idx]
 
-		plugins = append(plugins, GHPlugin{
+		pluginList = append(pluginList, GHPlugin{
 			Name:    pluginName,
 			Version: pluginVersion,
 		})
