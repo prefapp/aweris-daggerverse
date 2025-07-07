@@ -79,16 +79,16 @@ func (c GHContainer) container(binary *dagger.File) *dagger.Container {
 			if c.Plugins != nil {
 				// for each plugin, add the plugin to the container
 				for _, pluginData := range c.Plugins {
-					pluginName, nameExists := pluginData.Name
-					if !nameExists {
+					if pluginData.Name == "" {
 						panic("Unnamed plugin found")
 					}
 
-					command := []string{"gh", "extension", "install", pluginName}
+					command := []string{
+						"gh", "extension", "install", pluginData.Name
+					}
 
-					pluginVersion, versionExists := pluginData.Version
-					if versionExists {
-						command = append(command, "--pin", pluginVersion)
+					if pluginData.Version != "" {
+						command = append(command, "--pin", pluginData.Version)
 					}
 
 					ctr = ctr.WithExec(command)
