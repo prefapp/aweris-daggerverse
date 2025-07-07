@@ -47,17 +47,17 @@ func (c GHContainer) WithToken(token *dagger.Secret) GHContainer {
 }
 
 // WithPlugin returns the GHContainer with the given plugin.
-func (c GHContainer) WithPlugins(pluginNames []string, pluginVersions []string) GHContainer {
+func (c GHContainer) WithPlugins() GHContainer {
 	pluginList := []GHPlugin{}
 
-	for idx, pluginName := range pluginNames {
-		pluginVersion := pluginVersions[idx]
+	// for idx, pluginName := range pluginNames {
+	// 	pluginVersion := pluginVersions[idx]
 
-		pluginList = append(pluginList, GHPlugin{
-			Name:    pluginName,
-			Version: pluginVersion,
-		})
-	}
+	// 	pluginList = append(pluginList, GHPlugin{
+	// 		Name:    pluginName,
+	// 		Version: pluginVersion,
+	// 	})
+	// }
 
 	return GHContainer{
 		Base:    c.Base,
