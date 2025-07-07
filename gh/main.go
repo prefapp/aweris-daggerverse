@@ -74,7 +74,7 @@ func (m *Gh) Container(
 	// +optional
 	pluginNames []string,
 
-	// Gh plugin names
+	// Gh plugin versions
 	// +optional
 	pluginVersions []string,
 
