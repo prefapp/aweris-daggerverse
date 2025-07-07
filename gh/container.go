@@ -47,23 +47,12 @@ func (c GHContainer) WithToken(token *dagger.Secret) GHContainer {
 }
 
 // WithPlugin returns the GHContainer with the given plugin.
-func (c GHContainer) WithPlugins() GHContainer {
-	pluginList := []GHPlugin{}
-
-	// for idx, pluginName := range pluginNames {
-	// 	pluginVersion := pluginVersions[idx]
-
-	// 	pluginList = append(pluginList, GHPlugin{
-	// 		Name:    pluginName,
-	// 		Version: pluginVersion,
-	// 	})
-	// }
-
+func (c GHContainer) WithPlugins(plugins []GHPlugin) GHContainer {
 	return GHContainer{
 		Base:    c.Base,
 		Token:   c.Token,
 		Repo:    c.Repo,
-		Plugins: pluginList,
+		Plugins: plugins,
 	}
 }
 
