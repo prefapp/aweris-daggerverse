@@ -74,10 +74,6 @@ func (m *Gh) Container(
 	// +optional
 	plugins []string,
 
-	// Gh plugin versions
-	// +optional
-	// pluginVersions []string,
-
 ) (*dagger.Container, error) {
 	file, err := lo.Ternary(version != "", m.Binary.WithVersion(version), m.Binary).binary(ctx)
 	if err != nil {
