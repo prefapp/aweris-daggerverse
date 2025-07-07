@@ -36,7 +36,7 @@ func New(
 
 	// Gh plugins
 	// +optional
-	plugins []*GHPlugin,
+	plugins []GHPlugin,
 
 	// Base container for the Github CLI
 	// +optional
@@ -72,7 +72,7 @@ func (m *Gh) Container(
 
 	// Gh plugins
 	// +optional
-	plugins []*GHPlugin,
+	plugins []GHPlugin,
 
 ) (*dagger.Container, error) {
 	file, err := lo.Ternary(version != "", m.Binary.WithVersion(version), m.Binary).binary(ctx)
@@ -115,7 +115,7 @@ func (m *Gh) Run(
 
 	// Gh plugins
 	// +optional
-	plugins []*GHPlugin,
+	plugins []GHPlugin,
 
 	// disable cache
 	// +optional

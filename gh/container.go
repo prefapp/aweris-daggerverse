@@ -23,7 +23,7 @@ type GHContainer struct {
 	Repo string
 
 	// Github Plugins
-	Plugins []*GHPlugin
+	Plugins []GHPlugin
 }
 
 // WithRepo returns the GHContainer with the given repository.
@@ -47,7 +47,7 @@ func (c GHContainer) WithToken(token *dagger.Secret) GHContainer {
 }
 
 // WithPlugin returns the GHContainer with the given plugin.
-func (c GHContainer) WithPlugins(plugins []*GHPlugin) GHContainer {
+func (c GHContainer) WithPlugins(plugins []GHPlugin) GHContainer {
 	return GHContainer{
 		Base:    c.Base,
 		Token:   c.Token,
