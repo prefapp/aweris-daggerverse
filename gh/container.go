@@ -8,8 +8,8 @@ import (
 )
 
 type GHPlugin struct {
-	name    string
-	version string
+	Name    string
+	Version string
 }
 
 type GHContainer struct {
@@ -47,7 +47,7 @@ func (c GHContainer) WithToken(token *dagger.Secret) GHContainer {
 }
 
 // WithPlugin returns the GHContainer with the given plugin.
-func (c GHContainer) WithPlugins(plugins []map[string]string) GHContainer {
+func (c GHContainer) WithPlugins(plugins []GHPlugin) GHContainer {
 	return GHContainer{
 		Base:    c.Base,
 		Token:   c.Token,
@@ -79,14 +79,14 @@ func (c GHContainer) container(binary *dagger.File) *dagger.Container {
 			if c.Plugins != nil {
 				// for each plugin, add the plugin to the container
 				for _, pluginData := range c.Plugins {
-					pluginName, nameExists := pluginData["name"]
+					pluginName, nameExists := pluginData.Name
 					if !nameExists {
 						panic("Unnamed plugin found")
 					}
 
 					command := []string{"gh", "extension", "install", pluginName}
 
-					pluginVersion, versionExists := pluginData["version"]
+					pluginVersion, versionExists := pluginData.Version
 					if versionExists {
 						command = append(command, "--pin", pluginVersion)
 					}
