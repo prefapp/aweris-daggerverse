@@ -84,7 +84,7 @@ func (c GHContainer) container(binary *dagger.File) *dagger.Container {
 					}
 
 					command := []string{
-						"gh", "extension", "install", pluginData.Name
+						"gh", "extension", "install", pluginData.Name,
 					}
 
 					if pluginData.Version != "" {
