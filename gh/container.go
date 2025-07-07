@@ -8,8 +8,8 @@ import (
 )
 
 type GHPlugin struct {
-	name string,
-	version string,
+	name    string
+	version string
 }
 
 type GHContainer struct {
