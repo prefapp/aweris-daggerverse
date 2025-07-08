@@ -90,7 +90,11 @@ func (m *Gh) Container(
 	pluginList := []GHPlugin{}
 
 	for idx, pluginName := range pluginNames {
-		pluginVersion := pluginVersions[idx]
+		pluginVersion := ""
+
+		if idx < len(pluginVersions) {
+			pluginVersion = pluginVersions[idx]
+		}
 
 		pluginList = append(pluginList, GHPlugin{
 			Name:    pluginName,
